@@ -84,6 +84,7 @@ router.post("/login", async (req: Request, res: Response) => {
       res.cookie(SESSION_COOKIE, user.role, {
         httpOnly: true,
         sameSite: "lax",
+        secure: isProduction,
         path: "/",
         maxAge: 1000 * 60 * 60 * 8, // 8 jam
       });
@@ -101,6 +102,7 @@ router.post("/login", async (req: Request, res: Response) => {
   res.cookie(SESSION_COOKIE, role, {
     httpOnly: true,
     sameSite: "lax",
+    secure: isProduction,
     path: "/",
     maxAge: 1000 * 60 * 60 * 8, // 8 jam
   });
@@ -121,6 +123,7 @@ router.post("/register", async (req: Request, res: Response) => {
     res.cookie(SESSION_COOKIE, user.role, {
       httpOnly: true,
       sameSite: "lax",
+      secure: isProduction,
       path: "/",
       maxAge: 1000 * 60 * 60 * 8,
     });

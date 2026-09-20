@@ -229,11 +229,6 @@ export async function getAiContent(chapterId: string, mode: AiMode) {
   if (!content) {
     throw new Error("Konten untuk kombinasi Bab & Mode ini belum tersedia.");
   }
-  // Peluang gagal kecil (mis. LLM Engine sibuk) untuk mendemonstrasikan
-  // Error State + tombol "Refresh AI" / "Coba Lagi" pada AiContentPanel.
-  if (!isTestEnv && Math.random() < 0.1) {
-    throw new Error("Gagal menghasilkan konten dari LLM Engine. Silakan coba lagi.");
-  }
   return content;
 }
 
@@ -260,9 +255,6 @@ const materialsDb: MaterialRecord[] = [];
 
 export async function getMaterials(): Promise<MaterialRecord[]> {
   await delay(600);
-  if (!isTestEnv && Math.random() < 0.08) {
-    throw new Error("Gagal terhubung ke RAG Engine saat mengambil daftar materi.");
-  }
   return [...materialsDb].reverse();
 }
 
@@ -273,9 +265,6 @@ export async function saveMaterial(payload: {
   chapter?: string;
 }) {
   await delay(900);
-  if (!isTestEnv && Math.random() < 0.15) {
-    throw new Error("Gagal mengindeks dokumen ke RAG Engine. Coba lagi.");
-  }
   const record: MaterialRecord = {
     id: `doc_${Date.now()}`,
     title: payload.title,
