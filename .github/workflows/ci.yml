@@ -1,0 +1,44 @@
+name: Front-End CI/CD Quality Gate Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  verify-quality-gate:
+    name: Verify Quality Gate & Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js Runtime (v20)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install Project Dependencies
+        run: npm ci
+
+      - name: Biome Linter & Format Verification (Bab 9)
+        run: npm run lint
+
+      - name: Strict TypeScript Compilation (Bab 5)
+        run: npm run typecheck
+
+      - name: Production Next.js Build Pipeline (Bab 6 & 10)
+        run: npm run build
+
+      - name: Run Tests with Coverage (Bab 11)
+        run: npm run test:coverage
+
+      - name: Upload Coverage to Quality Gate
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
